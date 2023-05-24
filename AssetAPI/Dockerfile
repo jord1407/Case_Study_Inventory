@@ -10,6 +10,11 @@ WORKDIR /src
 COPY ["AssetAPI/AssetAPI.csproj", "AssetAPI/"]
 RUN dotnet restore "AssetAPI/AssetAPI.csproj"
 COPY . .
+
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+RUN dotnet ef database update --project "AssetRepository" --startup-project "AssetAPI"
+
 WORKDIR "/src/AssetAPI"
 RUN dotnet build "AssetAPI.csproj" -c Release -o /app/build
 

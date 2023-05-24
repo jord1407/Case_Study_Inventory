@@ -80,7 +80,7 @@
         },
         methods: {
             fetchData() {
-                fetch('https://localhost:55006/api/Invoice', {
+                fetch(process.env.VUE_APP_INVOICEAPI + '/api/Invoice', {
                     method: "GET",
                     headers: {
                         "Accept": "application/json",
@@ -94,7 +94,7 @@
                     })
             },
             generate() {
-                fetch('https://localhost:55010/api/InvoiceGenerator/GenerateServiceInvoice', {
+                fetch(process.env.VUE_APP_INVOICEGENERATORAPI + '/api/InvoiceGenerator/GenerateServiceInvoice', {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",

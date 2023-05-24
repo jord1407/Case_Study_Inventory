@@ -10,6 +10,11 @@ WORKDIR /src
 COPY ["InvoiceAPI/InvoiceAPI.csproj", "InvoiceAPI/"]
 RUN dotnet restore "InvoiceAPI/InvoiceAPI.csproj"
 COPY . .
+
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="$PATH:/root/.dotnet/tools"
+RUN dotnet ef database update --project "InvoiceRepository" --startup-project "InvoiceAPI"
+
 WORKDIR "/src/InvoiceAPI"
 RUN dotnet build "InvoiceAPI.csproj" -c Release -o /app/build
 

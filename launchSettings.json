@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "assetapi": "StartWithoutDebugging",
+        "invoicegeneratorapi": "StartWithoutDebugging",
+        "invoiceapi": "StartWithoutDebugging",
+        "db": "StartWithoutDebugging"
+      }
+    }
+  }
+}

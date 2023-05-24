@@ -87,7 +87,7 @@
         },
         methods: {
             fetchData() {
-                fetch('https://localhost:55008/api/Asset', {
+                fetch(process.env.VUE_APP_ASSETAPI + '/api/Asset', {
                     method: "GET",
                     headers: {
                         "Accept": "application/json",
@@ -101,7 +101,7 @@
                     })
             },
             deleteRow(id: number) {
-                fetch('https://localhost:55008/api/Asset/' + id, {
+                fetch(process.env.VUE_APP_ASSETAPI + '/api/Asset/' + id, {
                     method: "DELETE",
                     headers: {
                         "Accept": "application/json",

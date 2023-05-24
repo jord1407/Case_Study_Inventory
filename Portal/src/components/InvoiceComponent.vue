@@ -74,7 +74,7 @@
         },
         methods: {
             fetchData() {
-                fetch('https://localhost:55006/api/Invoice/' + this.id, {
+                fetch(process.env.VUE_APP_INVOICEAPI + '/api/Invoice/' + this.id, {
                     method: "GET",
                     headers: {
                         "Accept": "application/json",

@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InvoiceGeneratorAPI", "Invo
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "portal", "Portal\portal.esproj", "{D75CF4C3-CEE8-46F0-9CD7-AB4F609C4C64}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1A36A6F3-2412-4F5F-9F98-9D8CF368E2AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D75CF4C3-CEE8-46F0-9CD7-AB4F609C4C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D75CF4C3-CEE8-46F0-9CD7-AB4F609C4C64}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D75CF4C3-CEE8-46F0-9CD7-AB4F609C4C64}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1A36A6F3-2412-4F5F-9F98-9D8CF368E2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A36A6F3-2412-4F5F-9F98-9D8CF368E2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A36A6F3-2412-4F5F-9F98-9D8CF368E2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A36A6F3-2412-4F5F-9F98-9D8CF368E2AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -28,7 +28,7 @@ const router = createRouter({
 // Create your connection
 // See https://docs.microsoft.com/en-us/javascript/api/@microsoft/signalr/hubconnectionbuilder
 const connection = new HubConnectionBuilder()
-    .withUrl('https://localhost:55010/generatorhub', {
+    .withUrl(process.env.VUE_APP_INVOICEGENERATORAPI + '/generatorhub', {
         headers: {
             "Access-Control-Allow-Origin": "*"
         },

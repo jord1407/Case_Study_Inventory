@@ -76,7 +76,7 @@
         },
         methods: {
             fetchData() {
-                fetch('https://localhost:55008/api/Asset/' + this.id, {
+                fetch(process.env.VUE_APP_ASSETAPI + '/api/Asset/' + this.id, {
                     method: "GET",
                     headers: {
                         "Accept": "application/json",
@@ -93,7 +93,7 @@
                 e.preventDefault();
 
                 let method = "POST";
-                let uri = 'https://localhost:55008/api/Asset';
+                let uri = process.env.VUE_APP_ASSETAPI + '/api/Asset';
 
                 if (this.id != '0') {
                     method = "PUT";

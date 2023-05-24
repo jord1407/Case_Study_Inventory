@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  #CONTAINER SHOULD BE CREATED FIRST
+  db:
+    container_name: SQL-Server
+    restart: always
+    image: mcr.microsoft.com/mssql/server
+    ports:
+      - "1433:1433"
+    environment:
+      - MSSQL_SA_PASSWORD=qwertyu1*
+      - ACCEPT_EULA=Y
+    healthcheck:
+      test: ["CMD", "bash", "-c", "(/opt/mssql-tools/bin/sqlcmd -U sa -P qwertyu1* -Q 'SELECT 1') || exit 1"]
+      interval: 5s
+      timeout: 30s
+      retries: 3
+
+  assetapi:
+    container_name: Asset-API
+    image: ${DOCKER_REGISTRY-}assetapi
+    ports:
+        - "55008:443"
+    build:
+      context: .
+      dockerfile: AssetAPI/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    command: bash -c 'dotnet ef database update --project AssetRepository --startup-project AssetAPI'
+
+  invoicegeneratorapi:
+    container_name: Invoice-Generator-API
+    image: ${DOCKER_REGISTRY-}invoicegeneratorapi
+    ports:
+        - "55010:443"
+    build:
+      context: .
+      dockerfile: InvoiceGeneratorAPI/Dockerfile
+
+  invoiceapi:
+    container_name: Invoice-API
+    image: ${DOCKER_REGISTRY-}invoiceapi
+    ports: 
+        - "55006:443"
+    build:
+      context: .
+      dockerfile: InvoiceAPI/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
