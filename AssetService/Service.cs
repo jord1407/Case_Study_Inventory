@@ -73,7 +73,7 @@ namespace AssetService
             _context.Assets.Add(assetDb);
             _context.SaveChanges();
 
-            return asset;
+            return _mapper.Map<Asset>(_context.Assets.First(x => x.Id == assetDb.Id));
         }
 
         public Asset Modify(Asset asset)
@@ -83,7 +83,7 @@ namespace AssetService
             _mapper.Map(asset, assetDb);
             _context.SaveChanges();
 
-            return asset;
+            return _mapper.Map<Asset>(_context.Assets.First(x => x.Id == assetDb.Id));
         }
 
         public void Delete(int id)
