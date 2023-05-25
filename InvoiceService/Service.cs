@@ -53,7 +53,7 @@ namespace InvoiceService
             _context.Invoices.Add(invoiceDb);
             _context.SaveChanges();
 
-            return invoice;
+            return _mapper.Map<T>(_context.Invoices.First(x => x.Id == invoiceDb.Id));
         }
     }
 }
