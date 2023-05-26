@@ -1,8 +1,8 @@
 # Case_Study_Inventory
 
-##Instructions
+## Instructions
 
-###Deployment Instruction
+### Deployment Instruction
 
 1. We should make sure to use a development certificate,
 otherwise you can use a paid SSL certificate instead of the self signed and change and change the ASPNETCORE_ENVIRONMENT environement variable to 'Production'.
