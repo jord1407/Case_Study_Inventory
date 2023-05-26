@@ -35,3 +35,9 @@ npm run build
 ```
 
 6. Then open the index.html in a browser and use the application
+
+### Not Implemented or partially implemented
+
+- Integration Testing for Restful API
+- Add filters on the pages to search for services and invoices using ODATA
+- Sort by columns in the tables (Assets and Invoices) using ODATA
