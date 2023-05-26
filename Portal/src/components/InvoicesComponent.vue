@@ -11,32 +11,7 @@
 
             <br />
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col" style="text-align: center">Id</th>
-                        <th scope="col" style="text-align: center">Date</th>
-                        <th scope="col" style="text-align: center">Year</th>
-                        <th scope="col" style="text-align: center">Month</th>
-                        <th scope="col" style="text-align: center">Total</th>
-                        <th scope="col" style="text-align: center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody v-if="invoices">
-                    <tr v-for="invoice in invoices" v-bind:key="invoice.id">
-                        <th scope="row" style="text-align: center">{{ invoice.id }}</th>
-                        <td style="text-align: center">{{ format_date(new Date(invoice.date + 'Z')) }}</td>
-                        <td style="text-align: center">{{ invoice.year }}</td>
-                        <td style="text-align: center">{{ ("00" + invoice.month).slice(-2) }}</td>
-                        <td style="text-align: left">{{ invoice.total.toLocaleString("en-US", { style: "currency", currency: "CAD" }) }}</td>
-                        <td style="text-align: center">
-                            <span>
-                                <router-link :to="'/invoices/' + invoice.id" style="text-decoration: none;">Details</router-link>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <TableComponent :list="invoices" :headers="headers" :displayAction="true" :actions="actions"></TableComponent>
 
         </div>
     </div>
@@ -49,6 +24,8 @@
     import { useSignalR } from '@dreamonkey/vue-signalr';
     import moment from 'moment';
 
+    import TableComponent from './TableComponent.vue'
+
     export default defineComponent({
         name: 'Invoices-Component',
         setup() {
@@ -56,19 +33,46 @@
             const router = useRouter();
             const signalr = useSignalR();
             const id = route.params.id;
+            const headers: string[] = [
+                "Id",
+                "Date",
+                "Year",
+                "Total",
+                "Actions"
+            ];
 
             return {
                 id,
                 route,
                 router,
-                signalr
+                signalr,
+                headers
+            }
+        },
+        components: {
+            TableComponent
+        },
+        watch: {
+            invoices: function (val) {
+                TableComponent.list = val;
+            },
+            headers: function (val) {
+                TableComponent.headers = val
+            },
+            actions: function (val) {
+                TableComponent.actions = val
             }
         },
         data() {
+            const actions: { id: number, name: string, method: any, isRoute: Boolean, route: string }[] = [
+                { id: 1, name: "Details", method: null, isRoute: true, route: "/invoices/" },
+            ]
+
             return {
                 invoices: Array<Invoice>(),
                 buttonText: "Generate",
-                message: ""
+                message: "",
+                actions
             }
         },
         created() {

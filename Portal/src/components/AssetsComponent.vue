@@ -10,36 +10,7 @@
 
         <br />
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col" style="text-align: center">Id</th>
-                    <th scope="col" style="text-align: center">Name</th>
-                    <th scope="col" style="text-align: center">Price</th>
-                    <th scope="col" style="text-align: center">ValidFrom</th>
-                    <th scope="col" style="text-align: center">ValidTo</th>
-                    <th scope="col" style="text-align: center" v-if="!invoiceId">Actions</th>
-                </tr>
-            </thead>
-            <tbody v-if="assets">
-                <tr v-for="asset in assets" v-bind:key="asset.id">
-                    <th scope="row" style="text-align: center">{{ asset.id }}</th>
-                    <td style="text-align: left">{{ asset.name }}</td>
-                    <td style="text-align: left">{{ asset.price.toLocaleString("en-US", { style: "currency", currency: "CAD" }) }}</td>
-                    <td style="text-align: center">{{ format_date(asset.validFrom) }}</td>
-                    <td style="text-align: center">{{ format_date(asset.validTo) }}</td>
-                    <td style="text-align: center" v-if="!invoiceId">
-                        <span>
-                            <router-link :to="'/' + asset.id" style="text-decoration: none;">Edit</router-link>
-                        </span>
-                        &nbsp;&nbsp;
-                        <span>
-                            <a href="#" @click="deleteRow(asset.id)" style="text-decoration: none; color: #ff0000">Delete</a>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <TableComponent :list="assets" :headers="headers" :displayAction="!invoiceId" :actions="actions"></TableComponent>
 
     </div>
 </template>
@@ -49,6 +20,8 @@
     import { Asset } from '../models/Asset'
     import { useRoute, useRouter } from "vue-router";
     import moment from 'moment';
+
+    import TableComponent from './TableComponent.vue'
 
     export default defineComponent({
         name: 'Assets-Component',
@@ -62,20 +35,48 @@
                 default: null
             }
         },
+        components: {
+            TableComponent
+        },
+        watch: {
+            assets: function (val) {
+                TableComponent.list = val;
+            },
+            headers: function (val) {
+                TableComponent.headers = val
+            },
+            actions: function (val) {
+                TableComponent.actions = val
+            }
+        },
         setup() {
             const route = useRoute();
             const router = useRouter();
             const id = route.params.id;
+            const headers: string[] = [
+                "Id",
+                "Name",
+                "Price",
+                "ValidFrom",
+                "ValidTo"
+            ];
 
             return {
                 id,
                 route,
-                router
+                router,
+                headers
             }
         },
         data() {
+            const actions: { id: number, name: string, method: any, isRoute: Boolean, route: string }[] = [
+                { id: 1, name: "Edit", method: null, isRoute: true, route: "/" },
+                { id: 2, name: "Delete", method: (id: number) => this.deleteRow(id), isRoute: false, route: null },
+            ]
+
             return {
-                assets: Array<Asset>()
+                assets: Array<Asset>(),
+                actions
             }
         },
         created() {

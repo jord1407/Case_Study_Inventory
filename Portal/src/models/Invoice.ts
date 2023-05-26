@@ -1,6 +1,7 @@
 import { Asset } from "./Asset";
+import { IModel } from "./IModel"
 
-export class Invoice {
+export class Invoice implements IModel {
     public id: number | undefined;
     public date: Date | undefined;
     public year: number | undefined;
