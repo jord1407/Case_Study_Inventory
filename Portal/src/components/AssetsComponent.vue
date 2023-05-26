@@ -53,22 +53,22 @@
             const route = useRoute();
             const router = useRouter();
             const id = route.params.id;
-            const headers: string[] = [
-                "Id",
-                "Name",
-                "Price",
-                "ValidFrom",
-                "ValidTo"
-            ];
 
             return {
                 id,
                 route,
-                router,
-                headers
+                router
             }
         },
         data() {
+            const headers: { id: number, name: string, sortDirection: number, method: any }[] = [
+                { id: 1, name: "Id", sortDirection: 0, method: null },
+                { id: 2, name: "Name", sortDirection: 0, method: null },
+                { id: 3, name: "Price", sortDirection: 0, method: (price: number) => price.toLocaleString("en-US", { style: "currency", currency: "CAD" }) },
+                { id: 4, name: "ValidFrom", sortDirection: 0, method: (value: Date) => this.format_date(value) },
+                { id: 5, name: "ValidTo", sortDirection: 0, method: (value: Date) => this.format_date(value) }
+            ];
+
             const actions: { id: number, name: string, method: any, isRoute: Boolean, route: string }[] = [
                 { id: 1, name: "Edit", method: null, isRoute: true, route: "/" },
                 { id: 2, name: "Delete", method: (id: number) => this.deleteRow(id), isRoute: false, route: null },
@@ -76,7 +76,8 @@
 
             return {
                 assets: Array<Asset>(),
-                actions
+                actions,
+                headers
             }
         },
         created() {

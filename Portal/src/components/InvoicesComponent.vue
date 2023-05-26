@@ -33,20 +33,12 @@
             const router = useRouter();
             const signalr = useSignalR();
             const id = route.params.id;
-            const headers: string[] = [
-                "Id",
-                "Date",
-                "Year",
-                "Total",
-                "Actions"
-            ];
 
             return {
                 id,
                 route,
                 router,
-                signalr,
-                headers
+                signalr
             }
         },
         components: {
@@ -64,6 +56,14 @@
             }
         },
         data() {
+            const headers: { id: number, name: string, sortDirection: number, method: any }[] = [
+                { id: 1, name: "Id", sortDirection: 0, method: null },
+                { id: 2, name: "Date", sortDirection: 0, method: (value: Date) => this.format_date(new Date(value + 'Z')) },
+                { id: 3, name: "Month", sortDirection: 0, method: null },
+                { id: 4, name: "Year", sortDirection: 0, method: null },
+                { id: 5, name: "Total", sortDirection: 0, method: (price: number) => price.toLocaleString("en-US", { style: "currency", currency: "CAD" }) }
+            ];
+
             const actions: { id: number, name: string, method: any, isRoute: Boolean, route: string }[] = [
                 { id: 1, name: "Details", method: null, isRoute: true, route: "/invoices/" },
             ]
@@ -72,7 +72,8 @@
                 invoices: Array<Invoice>(),
                 buttonText: "Generate",
                 message: "",
-                actions
+                actions,
+                headers
             }
         },
         created() {
