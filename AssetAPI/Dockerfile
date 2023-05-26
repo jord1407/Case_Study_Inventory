@@ -11,9 +11,9 @@ COPY ["AssetAPI/AssetAPI.csproj", "AssetAPI/"]
 RUN dotnet restore "AssetAPI/AssetAPI.csproj"
 COPY . .
 
-RUN dotnet tool install --global dotnet-ef
-ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet ef database update --project "AssetRepository" --startup-project "AssetAPI"
+RUN dotnet dev-certs https --clean
+
+RUN dotnet dev-certs https --trust
 
 WORKDIR "/src/AssetAPI"
 RUN dotnet build "AssetAPI.csproj" -c Release -o /app/build
@@ -24,4 +24,5 @@ RUN dotnet publish "AssetAPI.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "AssetAPI.dll"]

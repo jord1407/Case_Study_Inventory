@@ -49,7 +49,7 @@
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadAsStringAsync();
             else
-                throw new HttpRequestException($"{response.StatusCode} - {response.Content}");
+                throw new HttpRequestException($"{uri} - {response.StatusCode} - {response.Content}");
         }
     }
 }

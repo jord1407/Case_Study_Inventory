@@ -11,9 +11,9 @@ COPY ["InvoiceAPI/InvoiceAPI.csproj", "InvoiceAPI/"]
 RUN dotnet restore "InvoiceAPI/InvoiceAPI.csproj"
 COPY . .
 
-RUN dotnet tool install --global dotnet-ef
-ENV PATH="$PATH:/root/.dotnet/tools"
-RUN dotnet ef database update --project "InvoiceRepository" --startup-project "InvoiceAPI"
+RUN dotnet dev-certs https --clean
+
+RUN dotnet dev-certs https --trust
 
 WORKDIR "/src/InvoiceAPI"
 RUN dotnet build "InvoiceAPI.csproj" -c Release -o /app/build
@@ -24,4 +24,5 @@ RUN dotnet publish "InvoiceAPI.csproj" -c Release -o /app/publish /p:UseAppHost=
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "InvoiceAPI.dll"]

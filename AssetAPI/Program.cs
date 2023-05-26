@@ -1,5 +1,6 @@
 using AssetRepository;
 using AssetService;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetAPI
@@ -31,6 +32,10 @@ namespace AssetAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();
+
             AppSettings settings = new AppSettings(builder.Configuration);
             builder.Services.AddDbContext<AssetContext>(options => options.UseSqlServer(AppSettings.AssetConnectionString));
 
@@ -46,10 +51,22 @@ namespace AssetAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseCors(MyAllowSpecificOrigins);
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<AssetContext>();
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+            }
 
             app.Run();
         }

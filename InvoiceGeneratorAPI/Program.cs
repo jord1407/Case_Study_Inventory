@@ -1,6 +1,7 @@
 using InvoiceGeneratorAPI.Hubs;
 using InvoiceGeneratorService;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace InvoiceGeneratorAPI
 {
@@ -31,6 +32,10 @@ namespace InvoiceGeneratorAPI
             builder.Services.AddSwaggerGen();
             builder.Services.AddSignalR();
 
+            builder.Services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();
+
             AppSettings settings = new AppSettings(builder.Configuration);
 
             var app = builder.Build();
@@ -48,6 +53,7 @@ namespace InvoiceGeneratorAPI
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

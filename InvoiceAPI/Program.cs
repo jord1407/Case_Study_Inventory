@@ -1,5 +1,6 @@
 using InvoiceRepository;
 using InvoiceService;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceAPI
@@ -30,6 +31,10 @@ namespace InvoiceAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();
+
             AppSettings settings = new AppSettings(builder.Configuration);
 
             builder.Services.AddDbContext<InvoiceContext>(options => options.UseSqlServer(AppSettings.InvoiceConnectionString));
@@ -46,10 +51,22 @@ namespace InvoiceAPI
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseCors(MyAllowSpecificOrigins);
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<InvoiceContext>();
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+            }
 
             app.Run();
         }

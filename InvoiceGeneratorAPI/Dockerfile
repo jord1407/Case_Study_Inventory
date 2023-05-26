@@ -10,6 +10,11 @@ WORKDIR /src
 COPY ["InvoiceGeneratorAPI/InvoiceGeneratorAPI.csproj", "InvoiceGeneratorAPI/"]
 RUN dotnet restore "InvoiceGeneratorAPI/InvoiceGeneratorAPI.csproj"
 COPY . .
+
+RUN dotnet dev-certs https --clean
+
+RUN dotnet dev-certs https --trust
+
 WORKDIR "/src/InvoiceGeneratorAPI"
 RUN dotnet build "InvoiceGeneratorAPI.csproj" -c Release -o /app/build
 
@@ -19,4 +24,5 @@ RUN dotnet publish "InvoiceGeneratorAPI.csproj" -c Release -o /app/publish /p:Us
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "InvoiceGeneratorAPI.dll"]

@@ -1,5 +1,6 @@
 version: '3.8'
 
+name: case_study_inventory
 services:
   #CONTAINER SHOULD BE CREATED FIRST
   db:
@@ -13,8 +14,8 @@ services:
       - ACCEPT_EULA=Y
     healthcheck:
       test: ["CMD", "bash", "-c", "(/opt/mssql-tools/bin/sqlcmd -U sa -P qwertyu1* -Q 'SELECT 1') || exit 1"]
-      interval: 5s
-      timeout: 30s
+      interval: 30s
+      timeout: 10s
       retries: 3
 
   assetapi:
@@ -28,7 +29,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: bash -c 'dotnet ef database update --project AssetRepository --startup-project AssetAPI'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
   invoicegeneratorapi:
     container_name: Invoice-Generator-API
@@ -38,6 +40,8 @@ services:
     build:
       context: .
       dockerfile: InvoiceGeneratorAPI/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
   invoiceapi:
     container_name: Invoice-API
@@ -47,6 +51,10 @@ services:
     build:
       context: .
       dockerfile: InvoiceAPI/Dockerfile
+      args:
+        - USERPROFILE=usermaltem
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
